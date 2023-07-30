@@ -7,5 +7,5 @@ A project for CT coding interviews
 To run local server, please type on your terminal:
 
 ```
-flutter run
+dart run bin/server.dart
 ```
