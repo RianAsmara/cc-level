@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:interviews_rian_asmara/detail_level.dart';
 import 'package:interviews_rian_asmara/src/model/level.dart';
-import 'package:game_levels_scrolling_map/game_levels_scrolling_map.dart';
-import 'package:game_levels_scrolling_map/model/point_model.dart';
+// import 'package:game_levels_scrolling_map/game_levels_scrolling_map.dart';
+// import 'package:game_levels_scrolling_map/model/point_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   LevelData? levelData;
   bool isLoading = false;
-  List<PointModel> points = [];
+  // List<PointModel> points = [];
 
 
   @override
@@ -137,21 +137,22 @@ class LevelTile extends StatelessWidget {
   });
 
   void _onTileTap(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LevelDetailScreen(
-          levelNumber: levelNumber,
-        ),
-      ),
-    );
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _onTileTap(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LevelDetailScreen(
+              levelNumber: levelNumber,
+              htmlContent: '<html><body><h1>Hello, world!</h1></body></html>',
+            ),
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.all(8.0),
