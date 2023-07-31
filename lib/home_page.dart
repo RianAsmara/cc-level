@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:interviews_rian_asmara/detail_level.dart';
 import 'package:interviews_rian_asmara/src/model/level.dart';
+import 'package:game_levels_scrolling_map/game_levels_scrolling_map.dart';
+import 'package:game_levels_scrolling_map/model/point_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,6 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   LevelData? levelData;
   bool isLoading = false;
+  List<PointModel> points = [];
+
 
   @override
   void initState() {
@@ -33,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (response.statusCode == 200) {
+
       final data = response.body.split('\n');
       int totalLevels = int.tryParse(data[0]) ?? 0;
       int completedLevels = int.tryParse(data[1]) ?? 0;
@@ -90,15 +95,16 @@ class LevelsMap extends StatelessWidget {
           child: CustomPaint(
             size: const Size(900, 600),
             painter: LevelMapPainter(levelData),
-            child: Column(
-              children: List.generate(levelData.totalLevels, (index) {
-                bool isCompleted = index < levelData.completedLevels;
-                return LevelTile(
-                  levelNumber: index + 1,
-                  isCompleted: isCompleted,
-                );
-              }),
-            ),
+              child: Column(
+                verticalDirection: VerticalDirection.up,
+                children: List.generate(levelData.totalLevels, (index) {
+                  bool isCompleted = index < levelData.completedLevels;
+                  return LevelTile(
+                    levelNumber: index + 1,
+                    isCompleted: isCompleted,
+                  );
+                }),
+              ),
           ),
         ),
       ),
@@ -147,38 +153,42 @@ class LevelTile extends StatelessWidget {
       onTap: () {
         _onTileTap(context);
       },
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              if (!isCompleted)
+      child: Container(
+        margin: const EdgeInsets.all(8.0),
+        child: Column(
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                if (!isCompleted)
+                  Container(
+                    width: 2,
+                    height: 30,
+                    color: Colors.grey,
+                  ),
                 Container(
-                  width: 2,
+                  width: 30,
                   height: 30,
-                  color: Colors.grey,
-                ),
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isCompleted ? Colors.green : Colors.grey,
-                ),
-                child: Center(
-                  child: Text(
-                    '$levelNumber',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isCompleted ? Colors.deepPurpleAccent : Colors.grey,
+                  ),
+                  child: Center(
+                    child: Text(
+                      '$levelNumber',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
-          ),
-          if (!isCompleted) const Divider(),
-        ],
+              ],
+            ),
+            // if (!isCompleted) const Divider(),
+          ],
+        ),
       ),
     );
   }
